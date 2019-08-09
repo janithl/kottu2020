@@ -6,14 +6,31 @@ import "time"
 type Post struct {
 	ID              int
 	BlogID          int
-	Link            string
 	Title           string
 	Content         string
-	FeedURL         string
+	Link            string
 	Language        string
 	CreatedAtRemote time.Time
 	CreatedAtLocal  time.Time
 	ShareCount      int
 	PostBuzz        float32
 	Trend           float32
+}
+
+// NewPost creates a new blog post
+func NewPost(id int, blogID int, title string, content string, link string,
+	createdAtRemote time.Time, createdAtLocal time.Time) *Post {
+	return &Post{
+		ID:              id,
+		BlogID:          blogID,
+		Title:           title,
+		Content:         content,
+		Link:            link,
+		Language:        "en",
+		CreatedAtRemote: createdAtRemote,
+		CreatedAtLocal:  createdAtLocal,
+		ShareCount:      0,
+		PostBuzz:        0.0,
+		Trend:           0.0,
+	}
 }

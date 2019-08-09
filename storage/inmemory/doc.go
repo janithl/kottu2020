@@ -1,2 +1,2 @@
-/*Package inmemory holds the in-memory storage implementations*/
+// Package inmemory holds the in-memory storage implementations
 package inmemory

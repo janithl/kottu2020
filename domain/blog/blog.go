@@ -13,8 +13,13 @@ type Blog struct {
 	Posts    []Post
 }
 
-// New creates a new blog with no posts
-func New(id int, name string, siteURL string, feedURL string) *Blog {
+// AddPost adds a new post to a blog
+func (b *Blog) AddPost(post *Post) {
+	b.Posts = append(b.Posts, *post)
+}
+
+// NewBlog creates a new blog with no posts
+func NewBlog(id int, name string, siteURL string, feedURL string) *Blog {
 	return &Blog{
 		ID:       id,
 		Name:     name,

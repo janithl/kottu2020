@@ -27,6 +27,6 @@ func NewBlog(id int, name string, siteURL string, feedURL string) *Blog {
 		FeedURL:  feedURL,
 		PolledAt: time.Time{},
 		Active:   true,
-		Posts:    make([]Post, 1),
+		Posts:    make([]Post, 0),
 	}
 }

@@ -12,7 +12,7 @@ func main() {
 	blogRepo := inmemory.NewBlogRepository()
 	blogService := service.NewBlogService(blogRepo)
 
-	port := flag.String("p", "9000", "server port")
+	port := flag.Int("p", 9000, "server port")
 	flag.Parse()
 
 	server := web.NewServer(*port, blogService)

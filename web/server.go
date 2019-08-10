@@ -13,19 +13,13 @@ import (
 
 // Server struct implements the REST API Server
 type Server struct {
-	port        string
+	port        int
 	blogService blog.Service
 }
 
-// ServerError struct is used to convey API errors
-type ServerError struct {
-	ErrorCode    int
-	ErrorMessage string
-}
-
-// defaultHandler serves out the index.html file
+// defaultHandler serves out the files in the static folder
 func (s *Server) defaultHandler(w http.ResponseWriter, r *http.Request) {
-	fp := path.Join("static", "index.html")
+	fp := path.Join("static", r.URL.Path[1:])
 	http.ServeFile(w, r, fp)
 }
 
@@ -89,12 +83,12 @@ func (s *Server) Serve() {
 	http.HandleFunc("/", s.defaultHandler)
 
 	// serve on given port
-	fmt.Println("Serving HTTP on localhost:" + s.port)
-	log.Fatal(http.ListenAndServe(":"+s.port, nil))
+	fmt.Printf("Serving HTTP on localhost: %d\n", s.port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil))
 }
 
 // NewServer returns a new instance of the server
-func NewServer(port string, blogService blog.Service) *Server {
+func NewServer(port int, blogService blog.Service) *Server {
 	return &Server{
 		port:        port,
 		blogService: blogService,

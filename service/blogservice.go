@@ -57,6 +57,11 @@ func (s *blogService) FindPost(id int) (*blog.Post, error) {
 	return p, err
 }
 
+// FindLatestPosts returns a list of length 'limit' of posts in given 'language'
+func (s *blogService) FindLatestPosts(language string, limit int) []*blog.Post {
+	return s.blogs.FindLatestPosts(language, limit)
+}
+
 // NewBlogService returns a new instance of the blog service
 func NewBlogService(repo blog.Repository) blog.Service {
 	return &blogService{

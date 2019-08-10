@@ -45,6 +45,13 @@ func TestBlogService(t *testing.T) {
 	if err != blog.ErrPostNotFound {
 		t.Errorf("Correct error not thrown trying to find missing post! %s", err.Error())
 	}
+
+	// Test if getting latest posts works
+	posts := blogService.FindLatestPosts("en", 10)
+	t.Run(p1.Title, testIfPostSliceContains(posts, p1))
+	t.Run(p2.Title, testIfPostSliceContains(posts, p2))
+	t.Run(p3.Title, testIfPostSliceContains(posts, p3))
+	t.Run(p4.Title, testIfPostSliceContains(posts, p4))
 }
 
 func testIfFoundBlog(service blog.Service, b *blog.Blog) func(*testing.T) {
@@ -67,6 +74,21 @@ func testIfFoundPost(service blog.Service, p *blog.Post) func(*testing.T) {
 		}
 		if actual != p {
 			t.Errorf("Expected to find value %s but got %s instead!", p.Title, actual.Title)
+		}
+	}
+}
+
+func testIfPostSliceContains(posts []*blog.Post, p *blog.Post) func(*testing.T) {
+	return func(t *testing.T) {
+		found := false
+		for _, post := range posts {
+			if post == p {
+				found = true
+			}
+		}
+
+		if !found {
+			t.Errorf("Post %s not found in slice! %v", p.Title, posts)
 		}
 	}
 }

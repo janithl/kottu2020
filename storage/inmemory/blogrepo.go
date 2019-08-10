@@ -56,12 +56,17 @@ func (r *blogRepository) FindPost(id int) (*blog.Post, error) {
 }
 
 // FindLatest returns the latest posts up to a limit from the in-memory repo
-func (r *blogRepository) FindLatestPosts(limit int) []*blog.Post {
+func (r *blogRepository) FindLatestPosts(language string, limit int) []*blog.Post {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	posts := make([]*blog.Post, limit)
-	// TODO: Implementation
+	posts := make([]*blog.Post, 0)
+	for _, post := range r.posts {
+		if len(posts) < limit {
+			posts = append(posts, post)
+		}
+	}
+
 	return posts
 }
 

@@ -8,7 +8,11 @@ in Go. The code structure is heavily inspired by Uncle Bob and
 
 ```
 go build -o bin/kottu -v .
-./bin/kottu
+
+cp .env.example .env
+# you will need to update DB values in the .env file
+
+./bin/kottu [-p to set port number]
 ```
 
 ## Run Tests

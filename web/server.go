@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"path"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/janithl/kottu2020/domain/blog"
 )
 
@@ -15,12 +15,7 @@ import (
 type Server struct {
 	port        int
 	blogService blog.Service
-}
-
-// defaultHandler serves out the files in the static folder
-func (s *Server) defaultHandler(w http.ResponseWriter, r *http.Request) {
-	fp := path.Join("static", r.URL.Path[1:])
-	http.ServeFile(w, r, fp)
+	staticPath  string
 }
 
 // outputJSON is a helper that converts the output object to JSON
@@ -49,42 +44,44 @@ func (s *Server) outputErrorJSON(w http.ResponseWriter, err error, errorCode int
 }
 
 // listDetails, given the ID and object type, lists the object's information
-func (s *Server) listDetails(objType string) http.HandlerFunc {
+func (s *Server) listDetails() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		slug := "/" + objType + "/"
-		id, err := strconv.Atoi(r.URL.Path[len(slug):])
+		vars := mux.Vars(r)
+		id, err := strconv.Atoi(vars["id"])
 		if s.outputErrorJSON(w, err, http.StatusBadRequest) {
 			return
 		}
 
-		if objType == "blog" {
+		if vars["objtype"] == "blog" {
 			blog, err := s.blogService.FindBlog(id)
 			if s.outputErrorJSON(w, err, http.StatusNotFound) {
 				return
 			}
-
 			s.outputJSON(w, blog)
-		} else if objType == "post" {
+		} else if vars["objtype"] == "post" {
 			post, err := s.blogService.FindPost(id)
 			if s.outputErrorJSON(w, err, http.StatusNotFound) {
 				return
 			}
-
-			defer s.outputJSON(w, post)
+			s.outputJSON(w, post)
 		}
 	}
 }
 
 // Serve serves HTTP
 func (s *Server) Serve() {
-	// define the routes
-	http.HandleFunc("/blog/", s.listDetails("blog"))
-	http.HandleFunc("/post/", s.listDetails("post"))
-	http.HandleFunc("/", s.defaultHandler)
+	r := mux.NewRouter()
+
+	// /api route
+	apirouter := r.PathPrefix("/api").Subrouter()
+	apirouter.HandleFunc("/{objtype}/{id:[0-9]+}", s.listDetails())
+
+	// static file serving
+	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(s.staticPath))))
 
 	// serve on given port
 	fmt.Printf("Serving HTTP on localhost: %d\n", s.port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", s.port), r))
 }
 
 // NewServer returns a new instance of the server
@@ -92,5 +89,6 @@ func NewServer(port int, blogService blog.Service) *Server {
 	return &Server{
 		port:        port,
 		blogService: blogService,
+		staticPath:  "static",
 	}
 }

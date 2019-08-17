@@ -1,18 +1,17 @@
 package sql
 
 import (
-	"database/sql"
 	"log"
 	"time"
 
-	"github.com/Masterminds/squirrel"
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/go-sql-driver/mysql" // mysql driver
 	"github.com/janithl/kottu2020/domain/blog"
+	"github.com/jmoiron/sqlx"
 )
 
 type blogRepository struct {
-	db *sql.DB
+	db database
 }
 
 func (b *blogRepository) Store(blog *blog.Blog) error {
@@ -20,15 +19,15 @@ func (b *blogRepository) Store(blog *blog.Blog) error {
 }
 
 func (b *blogRepository) Find(id int) (*blog.Blog, error) {
-	blogQuery := sq.Select("bid, blogName, blogURL, blogRSS").From("blogs").Where(squirrel.Eq{"bid": id})
-
-	var br blogRow
-	err := blogQuery.RunWith(b.db).QueryRow().Scan(&br.bid, &br.blogName, &br.blogURL, &br.blogRSS)
+	br := BlogRow{}
+	query := sq.Select("bid, blogName, blogURL, blogRSS").
+		From("blogs").Where(sq.Eq{"bid": id})
+	err := b.db.Get(&br, query)
 	if err != nil {
 		return nil, blog.ErrBlogNotFound
 	}
 
-	return blog.NewBlog(br.bid, br.blogName, br.blogURL, br.blogRSS), nil
+	return blog.NewBlog(br.BID, br.BlogName, br.BlogURL, br.BlogRSS), nil
 }
 
 func (b *blogRepository) StorePost(post *blog.Post) error {
@@ -36,32 +35,50 @@ func (b *blogRepository) StorePost(post *blog.Post) error {
 }
 
 func (b *blogRepository) FindPost(id int) (*blog.Post, error) {
-	postQuery := sq.Select("postID, blogID, title, postContent, link, serverTimestamp, api_ts").From("posts").Where(squirrel.Eq{"postID": id})
-
-	var pr postRow
-	err := postQuery.RunWith(b.db).QueryRow().Scan(&pr.postID, &pr.blogID, &pr.title,
-		&pr.postContent, &pr.link, &pr.serverTimestamp, &pr.apiTs)
+	query := sq.Select("postID, blogID, title, postContent, link, serverTimestamp, api_ts").
+		From("posts").
+		Where(sq.Eq{"postID": id})
+	pr := PostRow{}
+	err := b.db.Get(&pr, query)
 	if err != nil {
 		return nil, blog.ErrPostNotFound
 	}
 
-	return blog.NewPost(pr.postID, pr.blogID, pr.title, pr.postContent, pr.link,
-		time.Unix(pr.serverTimestamp, 0), time.Unix(pr.apiTs, 0)), nil
+	return blog.NewPost(pr.PostID, pr.BlogID, pr.Title, pr.PostContent, pr.Link,
+		time.Unix(pr.ServerTimestamp, 0), time.Unix(pr.APITimestamp, 0)), nil
 }
 
 func (b *blogRepository) FindLatestPosts(language string, limit int) []*blog.Post {
-	return nil
+	query := sq.Select("postID, blogID, title, postContent, link, serverTimestamp, api_ts").
+		From("posts").
+		Where(sq.Eq{"language": language}).
+		OrderBy("serverTimestamp DESC").
+		Limit(uint64(limit))
+	pr := []PostRow{}
+	err := b.db.Select(&pr, query)
+	if err != nil {
+		return nil
+	}
+
+	posts := []*blog.Post{}
+	for _, p := range pr {
+		post := blog.NewPost(p.PostID, p.BlogID, p.Title, p.PostContent, p.Link,
+			time.Unix(p.ServerTimestamp, 0), time.Unix(p.APITimestamp, 0))
+		posts = append(posts, post)
+	}
+
+	return posts
 }
 
 // NewBlogRepository returns a new instance of a blog repository
 func NewBlogRepository(conn string) blog.Repository {
-	db, err := sql.Open("mysql", conn)
+	db, err := sqlx.Open("mysql", conn)
 	if err != nil {
 		log.Fatal(err)
 	}
 	//defer db.Close()
 
 	return &blogRepository{
-		db: db,
+		db: database{db: db},
 	}
 }

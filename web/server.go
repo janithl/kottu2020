@@ -44,7 +44,7 @@ func (s *Server) outputErrorJSON(w http.ResponseWriter, err error, errorCode int
 }
 
 // listDetails, given the ID and object type, lists the object's information
-func (s *Server) listDetails() http.HandlerFunc {
+func (s *Server) listDetails(objtype string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id, err := strconv.Atoi(vars["id"])
@@ -52,19 +52,28 @@ func (s *Server) listDetails() http.HandlerFunc {
 			return
 		}
 
-		if vars["objtype"] == "blog" {
-			blog, err := s.blogService.FindBlog(id)
+		var output interface{}
+		if objtype == "blog" {
+			output, err = s.blogService.FindBlog(id)
 			if s.outputErrorJSON(w, err, http.StatusNotFound) {
 				return
 			}
-			s.outputJSON(w, blog)
-		} else if vars["objtype"] == "post" {
-			post, err := s.blogService.FindPost(id)
+
+		} else if objtype == "post" {
+			output, err = s.blogService.FindPost(id)
 			if s.outputErrorJSON(w, err, http.StatusNotFound) {
 				return
 			}
-			s.outputJSON(w, post)
 		}
+		s.outputJSON(w, output)
+	}
+}
+
+// latestPosts returns the newest posts
+func (s *Server) latestPosts() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		output := s.blogService.FindLatestPosts("en", 20)
+		s.outputJSON(w, output)
 	}
 }
 
@@ -74,7 +83,9 @@ func (s *Server) Serve() {
 
 	// /api route
 	apirouter := r.PathPrefix("/api").Subrouter()
-	apirouter.HandleFunc("/{objtype}/{id:[0-9]+}", s.listDetails())
+	apirouter.HandleFunc("/blog/{id:[0-9]+}", s.listDetails("blog"))
+	apirouter.HandleFunc("/post/{id:[0-9]+}", s.listDetails("post"))
+	apirouter.HandleFunc("/latest", s.latestPosts())
 
 	// static file serving
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(s.staticPath))))

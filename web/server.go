@@ -77,7 +77,11 @@ func (s *Server) latestPosts() http.HandlerFunc {
 		if err != nil {
 			page = 1
 		}
-		output := s.blogService.FindLatestPosts("en", 20, page)
+		lang, ok := vars["language"]
+		if !ok {
+			lang = "en"
+		}
+		output := s.blogService.FindLatestPosts(lang, 20, page)
 		s.outputJSON(w, output)
 	}
 }
@@ -92,6 +96,8 @@ func (s *Server) Serve() {
 	apirouter.HandleFunc("/post/{id:[0-9]+}", s.listDetails("post"))
 	apirouter.HandleFunc("/latest", s.latestPosts())
 	apirouter.HandleFunc("/latest/page/{page:[0-9]+}", s.latestPosts())
+	apirouter.HandleFunc("/latest/{language:[a-z]{2}}", s.latestPosts())
+	apirouter.HandleFunc("/latest/{language:[a-z]{2}}/page/{page:[0-9]+}", s.latestPosts())
 
 	// static file serving
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(s.staticPath))))

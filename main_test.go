@@ -47,7 +47,7 @@ func TestBlogService(t *testing.T) {
 	}
 
 	// Test if getting latest posts works
-	posts := blogService.FindLatestPosts("en", 10)
+	posts := blogService.FindLatestPosts("en", 10, 1)
 	t.Run(p1.Title, testIfPostSliceContains(posts, p1))
 	t.Run(p2.Title, testIfPostSliceContains(posts, p2))
 	t.Run(p3.Title, testIfPostSliceContains(posts, p3))

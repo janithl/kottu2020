@@ -48,11 +48,12 @@ func (b *blogRepository) FindPost(id int) (*blog.Post, error) {
 		time.Unix(pr.ServerTimestamp, 0), time.Unix(pr.APITimestamp, 0)), nil
 }
 
-func (b *blogRepository) FindLatestPosts(language string, limit int) []*blog.Post {
+func (b *blogRepository) FindLatestPosts(language string, limit int, page int) []*blog.Post {
 	query := sq.Select("postID, blogID, title, postContent, link, serverTimestamp, api_ts").
 		From("posts").
 		Where(sq.Eq{"language": language}).
 		OrderBy("serverTimestamp DESC").
+		Offset(uint64((page - 1) * limit)).
 		Limit(uint64(limit))
 	pr := []PostRow{}
 	err := b.db.Select(&pr, query)
@@ -76,7 +77,6 @@ func NewBlogRepository(conn string) blog.Repository {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//defer db.Close()
 
 	return &blogRepository{
 		db: database{db: db},

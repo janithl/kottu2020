@@ -6,5 +6,5 @@ type Service interface {
 	FindBlog(id int) (*Blog, error)
 	StoreNewPost(blogID int, title string, content string, link string) (*Post, error)
 	FindPost(id int) (*Post, error)
-	FindLatestPosts(language string, limit int) []*Post
+	FindLatestPosts(language string, limit int, page int) []*Post
 }

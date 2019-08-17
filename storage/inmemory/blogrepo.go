@@ -56,7 +56,7 @@ func (r *blogRepository) FindPost(id int) (*blog.Post, error) {
 }
 
 // FindLatest returns the latest posts up to a limit from the in-memory repo
-func (r *blogRepository) FindLatestPosts(language string, limit int) []*blog.Post {
+func (r *blogRepository) FindLatestPosts(language string, limit int, page int) []*blog.Post {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 

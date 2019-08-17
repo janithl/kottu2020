@@ -8,7 +8,7 @@ type Repository interface {
 	Find(id int) (*Blog, error)
 	StorePost(post *Post) error
 	FindPost(id int) (*Post, error)
-	FindLatestPosts(language string, limit int) []*Post
+	FindLatestPosts(language string, limit int, page int) []*Post
 }
 
 // ErrBlogNotFound is used when a blog could not be found.

@@ -4,7 +4,7 @@ package post
 type Service interface {
 	StoreNewPost(blogID int, title string, content string, link string) (*Post, error)
 	FindPost(id int) (*Post, error)
-	FindLatestPosts(language string, limit int, page int) []*Post
+	FindLatestPosts(language string, page int) []*Post
 }
 
 // public function fetchpopularposts($lang='all', $time='off', $size, $pageno=0)

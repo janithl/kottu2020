@@ -83,7 +83,7 @@ func (s *Server) latestPosts() http.HandlerFunc {
 		if !ok {
 			lang = "en"
 		}
-		output := s.postService.FindLatestPosts(lang, 20, page)
+		output := s.postService.FindLatestPosts(lang, page)
 		s.outputJSON(w, output)
 	}
 }

@@ -6,6 +6,8 @@ import (
 	"github.com/janithl/kottu2020/domain/post"
 )
 
+const perPage = 20
+
 // postService holds the implementation of the post service
 type postService struct {
 	posts post.Repository
@@ -29,8 +31,8 @@ func (s *postService) FindPost(id int) (*post.Post, error) {
 }
 
 // FindLatestPosts returns a list of length 'limit' of posts in given 'language'
-func (s *postService) FindLatestPosts(language string, limit int, page int) []*post.Post {
-	return s.posts.FindLatest(language, limit, page)
+func (s *postService) FindLatestPosts(language string, page int) []*post.Post {
+	return s.posts.FindLatest(language, perPage, page)
 }
 
 // NewPostService returns a new instance of the post service

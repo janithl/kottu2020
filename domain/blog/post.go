@@ -28,10 +28,11 @@ func (p *Post) SetStatistics(shareCount int, postBuzz float32, trend float32) {
 	p.ShareCount = shareCount
 	p.PostBuzz = postBuzz
 	p.Trend = trend
+	p.calculateChilies()
 }
 
-// CalculateChilies calculates the amount of 'chilies' per post
-func (p *Post) CalculateChilies() {
+// calculateChilies calculates the amount of 'chilies' per post
+func (p *Post) calculateChilies() {
 	buzz := p.PostBuzz * 100
 	if buzz <= 1 {
 		p.Chilies = 1

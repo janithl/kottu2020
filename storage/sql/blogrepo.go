@@ -52,8 +52,6 @@ func (b *blogRepository) FindPost(id int) (*blog.Post, error) {
 
 	post.SetLanguage(pr.Language)
 	post.SetStatistics(int(pr.FBCount), pr.PostBuzz, pr.Trend)
-	post.CalculateChilies()
-
 	return post, nil
 }
 
@@ -78,7 +76,6 @@ func (b *blogRepository) FindLatestPosts(language string, limit int, page int) [
 			time.Unix(p.ServerTimestamp, 0), time.Unix(p.APITimestamp, 0))
 		post.SetLanguage(p.Language)
 		post.SetStatistics(int(p.FBCount), p.PostBuzz, p.Trend)
-		post.CalculateChilies()
 		posts = append(posts, post)
 	}
 

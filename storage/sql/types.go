@@ -35,11 +35,15 @@ type BlogRow struct {
 
 // PostRow holds the post data in the db
 type PostRow struct {
-	PostID          int    `db:"postID"`
-	BlogID          int    `db:"blogID"`
-	Title           string `db:"title"`
-	PostContent     string `db:"postContent"`
-	Link            string `db:"link"`
-	ServerTimestamp int64  `db:"serverTimestamp"`
-	APITimestamp    int64  `db:"api_ts"`
+	PostID          int     `db:"postID"`
+	BlogID          int     `db:"blogID"`
+	Title           string  `db:"title"`
+	PostContent     string  `db:"postContent"`
+	Link            string  `db:"link"`
+	ServerTimestamp int64   `db:"serverTimestamp"`
+	APITimestamp    int64   `db:"api_ts"`
+	Language        string  `db:"language"`
+	FBCount         int64   `db:"fbCount"`
+	PostBuzz        float32 `db:"postBuzz"`
+	Trend           float32 `db:"trend"`
 }

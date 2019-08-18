@@ -5,12 +5,10 @@ type Service interface {
 	StoreNewPost(blogID int, title string, content string, link string) (*Post, error)
 	FindPost(id int) (*Post, error)
 	FindLatestPosts(language string, page int) []*Post
+	FindPopularPosts(language string, period string, page int) []*Post
+	FindBlogPosts(blogID int, sort string, page int) []*Post
+	SearchPosts(query string, language string, page int) []*Post
 }
-
-// public function fetchpopularposts($lang='all', $time='off', $size, $pageno=0)
-// public function fetchblogposts($blogid, $size, $pageno = 0, $sort)
-// public function searchposts($str, $pageno=0, $lang='all')
-// public function fetchposturl($id)
 
 // new service
 // public function insertclick($ip, $pid)

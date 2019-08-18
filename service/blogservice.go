@@ -43,6 +43,21 @@ func (s *blogService) StoreNewPost(blogID int, post *post.Post) (*post.Post, err
 	return post, nil
 }
 
+// BlogCount returns the total number of blogs
+func (s *blogService) BlogCount() int {
+	return 0
+}
+
+// FindAllBlogs returns a paginated listing of all blogs
+func (s *blogService) FindAllBlogs(page int) []*blog.Blog {
+	return nil
+}
+
+// FindPopularBlogs returns a listing of the most popular blogs
+func (s *blogService) FindPopularBlogs() []*blog.Blog {
+	return nil
+}
+
 // NewBlogService returns a new instance of the blog service
 func NewBlogService(repo blog.Repository) blog.Service {
 	return &blogService{

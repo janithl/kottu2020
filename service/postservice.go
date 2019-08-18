@@ -30,9 +30,24 @@ func (s *postService) FindPost(id int) (*post.Post, error) {
 	return p, err
 }
 
-// FindLatestPosts returns a list of length 'limit' of posts in given 'language'
+// FindLatestPosts returns a paginated list of posts in given 'language'
 func (s *postService) FindLatestPosts(language string, page int) []*post.Post {
 	return s.posts.FindLatest(language, perPage, page)
+}
+
+// FindPopularPosts returns a paginated list of popular posts for a given language and period
+func (s *postService) FindPopularPosts(language string, period string, page int) []*post.Post {
+	return nil
+}
+
+// FindBlogPosts returns a paginated and sorted list of posts belonging to a given blog
+func (s *postService) FindBlogPosts(blogID int, sort string, page int) []*post.Post {
+	return nil
+}
+
+// SearchPosts returns a paginated list of posts for a given language matching the search query
+func (s *postService) SearchPosts(query string, language string, page int) []*post.Post {
+	return nil
 }
 
 // NewPostService returns a new instance of the post service

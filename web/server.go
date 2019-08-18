@@ -9,12 +9,14 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/janithl/kottu2020/domain/blog"
+	"github.com/janithl/kottu2020/domain/post"
 )
 
 // Server struct implements the REST API Server
 type Server struct {
 	port        int
 	blogService blog.Service
+	postService post.Service
 	staticPath  string
 }
 
@@ -60,7 +62,7 @@ func (s *Server) listDetails(objtype string) http.HandlerFunc {
 			}
 
 		} else if objtype == "post" {
-			output, err = s.blogService.FindPost(id)
+			output, err = s.postService.FindPost(id)
 			if s.outputErrorJSON(w, err, http.StatusNotFound) {
 				return
 			}
@@ -81,7 +83,7 @@ func (s *Server) latestPosts() http.HandlerFunc {
 		if !ok {
 			lang = "en"
 		}
-		output := s.blogService.FindLatestPosts(lang, 20, page)
+		output := s.postService.FindLatestPosts(lang, 20, page)
 		s.outputJSON(w, output)
 	}
 }
@@ -108,10 +110,11 @@ func (s *Server) Serve() {
 }
 
 // NewServer returns a new instance of the server
-func NewServer(port int, blogService blog.Service) *Server {
+func NewServer(port int, blogService blog.Service, postService post.Service) *Server {
 	return &Server{
 		port:        port,
 		blogService: blogService,
+		postService: postService,
 		staticPath:  "static",
 	}
 }

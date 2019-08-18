@@ -1,6 +1,7 @@
 package blog
 
 import "time"
+import "github.com/janithl/kottu2020/domain/post"
 
 // Blog type holds information about blogs
 type Blog struct {
@@ -10,11 +11,11 @@ type Blog struct {
 	FeedURL  string
 	PolledAt time.Time
 	Active   bool
-	Posts    []Post
+	Posts    []post.Post
 }
 
 // AddPost adds a new post to a blog
-func (b *Blog) AddPost(post *Post) {
+func (b *Blog) AddPost(post *post.Post) {
 	b.Posts = append(b.Posts, *post)
 }
 
@@ -27,6 +28,6 @@ func NewBlog(id int, name string, siteURL string, feedURL string) *Blog {
 		FeedURL:  feedURL,
 		PolledAt: time.Time{},
 		Active:   true,
-		Posts:    make([]Post, 0),
+		Posts:    make([]post.Post, 0),
 	}
 }

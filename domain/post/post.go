@@ -1,8 +1,8 @@
-package blog
+package post
 
 import "time"
 
-// Post type holds information about the posts in blogs
+// Post type holds information about the blog posts
 type Post struct {
 	ID              int
 	BlogID          int

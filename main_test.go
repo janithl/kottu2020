@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/janithl/kottu2020/domain/blog"
+	"github.com/janithl/kottu2020/domain/post"
 	"github.com/janithl/kottu2020/service"
 	"github.com/janithl/kottu2020/storage/inmemory"
 )
@@ -13,6 +14,9 @@ import (
 func TestBlogService(t *testing.T) {
 	blogRepo := inmemory.NewBlogRepository()
 	blogService := service.NewBlogService(blogRepo)
+
+	postRepo := inmemory.NewPostRepository()
+	postService := service.NewPostService(postRepo)
 
 	// Create the blogs and see if we can retrieve them
 	b1, _ := blogService.StoreNewBlog("Hello Blog", "https://blog.hello.com", "https://blog.hello.com/feed")
@@ -25,29 +29,29 @@ func TestBlogService(t *testing.T) {
 
 	// Try to find nonexistent blog, should throw correct error
 	_, err := blogService.FindBlog(10)
-	if err != blog.ErrBlogNotFound {
+	if err != blog.ErrNotFound {
 		t.Errorf("Correct error not thrown trying to find missing blog! %s", err.Error())
 	}
 
 	// Create the posts and see if we can retrieve them
-	p1, _ := blogService.StoreNewPost(b1.ID, "Hello Blog Intro", "Intro", "https://blog.hello.com/post/intro")
-	p2, _ := blogService.StoreNewPost(b1.ID, "Hello Blog Conclusion", "Conclusion", "https://blog.hello.com/post/end")
-	p3, _ := blogService.StoreNewPost(b2.ID, "Mello Blog Intro", "Intro", "https://blog.mello.com/post/intro")
-	p4, _ := blogService.StoreNewPost(b2.ID, "Mello Blog Conclusion", "Conclusion", "https://blog.mello.com/post/end")
+	p1, _ := postService.StoreNewPost(b1.ID, "Hello Blog Intro", "Intro", "https://blog.hello.com/post/intro")
+	p2, _ := postService.StoreNewPost(b1.ID, "Hello Blog Conclusion", "Conclusion", "https://blog.hello.com/post/end")
+	p3, _ := postService.StoreNewPost(b2.ID, "Mello Blog Intro", "Intro", "https://blog.mello.com/post/intro")
+	p4, _ := postService.StoreNewPost(b2.ID, "Mello Blog Conclusion", "Conclusion", "https://blog.mello.com/post/end")
 
-	t.Run(p1.Title, testIfFoundPost(blogService, p1))
-	t.Run(p2.Title, testIfFoundPost(blogService, p2))
-	t.Run(p3.Title, testIfFoundPost(blogService, p3))
-	t.Run(p4.Title, testIfFoundPost(blogService, p4))
+	t.Run(p1.Title, testIfFoundPost(postService, p1))
+	t.Run(p2.Title, testIfFoundPost(postService, p2))
+	t.Run(p3.Title, testIfFoundPost(postService, p3))
+	t.Run(p4.Title, testIfFoundPost(postService, p4))
 
 	// Try to find nonexistent post, should throw correct error
-	_, err = blogService.FindPost(10)
-	if err != blog.ErrPostNotFound {
+	_, err = postService.FindPost(10)
+	if err != post.ErrNotFound {
 		t.Errorf("Correct error not thrown trying to find missing post! %s", err.Error())
 	}
 
 	// Test if getting latest posts works
-	posts := blogService.FindLatestPosts("en", 10, 1)
+	posts := postService.FindLatestPosts("en", 10, 1)
 	t.Run(p1.Title, testIfPostSliceContains(posts, p1))
 	t.Run(p2.Title, testIfPostSliceContains(posts, p2))
 	t.Run(p3.Title, testIfPostSliceContains(posts, p3))
@@ -66,7 +70,7 @@ func testIfFoundBlog(service blog.Service, b *blog.Blog) func(*testing.T) {
 	}
 }
 
-func testIfFoundPost(service blog.Service, p *blog.Post) func(*testing.T) {
+func testIfFoundPost(service post.Service, p *post.Post) func(*testing.T) {
 	return func(t *testing.T) {
 		actual, err := service.FindPost(p.ID)
 		if err != nil {
@@ -78,7 +82,7 @@ func testIfFoundPost(service blog.Service, p *blog.Post) func(*testing.T) {
 	}
 }
 
-func testIfPostSliceContains(posts []*blog.Post, p *blog.Post) func(*testing.T) {
+func testIfPostSliceContains(posts []*post.Post, p *post.Post) func(*testing.T) {
 	return func(t *testing.T) {
 		found := false
 		for _, post := range posts {

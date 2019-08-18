@@ -1,9 +1,8 @@
 package service
 
 import (
-	"time"
-
 	"github.com/janithl/kottu2020/domain/blog"
+	"github.com/janithl/kottu2020/domain/post"
 )
 
 // blogService holds the implementation of the blog service
@@ -29,37 +28,19 @@ func (s *blogService) FindBlog(id int) (*blog.Blog, error) {
 }
 
 // StoreNewPost stores a new post
-func (s *blogService) StoreNewPost(blogID int, title string, content string, link string) (*blog.Post, error) {
+func (s *blogService) StoreNewPost(blogID int, post *post.Post) (*post.Post, error) {
 	b, err := s.FindBlog(blogID)
 	if err != nil {
 		return nil, err
 	}
 
-	post := blog.NewPost(0, blogID, title, content, link, time.Now(), time.Now())
 	b.AddPost(post)
-
 	err = s.blogs.Store(b)
 	if err != nil {
 		return nil, err
 	}
 
-	err = s.blogs.StorePost(post)
-	if err != nil {
-		return nil, err
-	}
-
 	return post, nil
-}
-
-// FindPost finds a post by its ID
-func (s *blogService) FindPost(id int) (*blog.Post, error) {
-	p, err := s.blogs.FindPost(id)
-	return p, err
-}
-
-// FindLatestPosts returns a list of length 'limit' of posts in given 'language'
-func (s *blogService) FindLatestPosts(language string, limit int, page int) []*blog.Post {
-	return s.blogs.FindLatestPosts(language, limit, page)
 }
 
 // NewBlogService returns a new instance of the blog service

@@ -14,10 +14,13 @@ func main() {
 	blogRepo := sql.NewBlogRepository(connectionString())
 	blogService := service.NewBlogService(blogRepo)
 
+	postRepo := sql.NewPostRepository(connectionString())
+	postService := service.NewPostService(postRepo)
+
 	port := flag.Int("p", 9000, "server port")
 	flag.Parse()
 
-	server := web.NewServer(*port, blogService)
+	server := web.NewServer(*port, blogService, postService)
 	server.Serve()
 }
 

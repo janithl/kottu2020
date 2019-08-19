@@ -88,6 +88,32 @@ func (s *Server) latestPosts() http.HandlerFunc {
 	}
 }
 
+// listBlogs returns listings of blogs
+func (s *Server) listBlogs(criteria string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		var output []*blog.Blog
+		if criteria == "all" {
+			page, err := strconv.Atoi(vars["page"])
+			if err != nil {
+				page = 1
+			}
+			output = s.blogService.FindAllBlogs(page)
+		} else {
+			output = s.blogService.FindPopularBlogs()
+		}
+		s.outputJSON(w, output)
+	}
+}
+
+// getBlogCount returns the count of blogs
+func (s *Server) getBlogCount() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		count := s.blogService.BlogCount()
+		s.outputJSON(w, map[string]int{"count": count})
+	}
+}
+
 // Serve serves HTTP
 func (s *Server) Serve() {
 	r := mux.NewRouter()
@@ -96,10 +122,16 @@ func (s *Server) Serve() {
 	apirouter := r.PathPrefix("/api").Subrouter()
 	apirouter.HandleFunc("/blog/{id:[0-9]+}", s.listDetails("blog"))
 	apirouter.HandleFunc("/post/{id:[0-9]+}", s.listDetails("post"))
+
 	apirouter.HandleFunc("/latest", s.latestPosts())
 	apirouter.HandleFunc("/latest/page/{page:[0-9]+}", s.latestPosts())
 	apirouter.HandleFunc("/latest/{language:[a-z]{2}}", s.latestPosts())
 	apirouter.HandleFunc("/latest/{language:[a-z]{2}}/page/{page:[0-9]+}", s.latestPosts())
+
+	apirouter.HandleFunc("/blogs/all", s.listBlogs("all"))
+	apirouter.HandleFunc("/blogs/all/page/{page:[0-9]+}", s.listBlogs("all"))
+	apirouter.HandleFunc("/blogs/popular", s.listBlogs("popular"))
+	apirouter.HandleFunc("/blogs/count", s.getBlogCount())
 
 	// static file serving
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(s.staticPath))))

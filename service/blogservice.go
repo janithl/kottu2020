@@ -45,17 +45,17 @@ func (s *blogService) StoreNewPost(blogID int, post *post.Post) (*post.Post, err
 
 // BlogCount returns the total number of blogs
 func (s *blogService) BlogCount() int {
-	return 0
+	return s.blogs.Count()
 }
 
 // FindAllBlogs returns a paginated listing of all blogs
 func (s *blogService) FindAllBlogs(page int) []*blog.Blog {
-	return nil
+	return s.blogs.FindAll(perPage, page)
 }
 
 // FindPopularBlogs returns a listing of the most popular blogs
 func (s *blogService) FindPopularBlogs() []*blog.Blog {
-	return nil
+	return s.blogs.FindPopular(perPage)
 }
 
 // NewBlogService returns a new instance of the blog service

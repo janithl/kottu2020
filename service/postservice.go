@@ -6,8 +6,6 @@ import (
 	"github.com/janithl/kottu2020/domain/post"
 )
 
-const perPage = 20
-
 // postService holds the implementation of the post service
 type postService struct {
 	posts post.Repository

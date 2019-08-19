@@ -27,6 +27,13 @@ func TestBlogService(t *testing.T) {
 	t.Run(b2.Name, testIfFoundBlog(blogService, b2))
 	t.Run(b3.Name, testIfFoundBlog(blogService, b3))
 
+	// Check if blog count is 3
+	count := blogService.BlogCount()
+	expected := 3
+	if count != expected {
+		t.Errorf("Expected to find blog count %d but got %d instead!", expected, count)
+	}
+
 	// Try to find nonexistent blog, should throw correct error
 	_, err := blogService.FindBlog(10)
 	if err != blog.ErrNotFound {

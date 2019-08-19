@@ -32,6 +32,43 @@ func (r *blogRepository) Find(id int) (*blog.Blog, error) {
 	return nil, blog.ErrNotFound
 }
 
+// Count returns the total number of blogs
+func (r *blogRepository) Count() int {
+	r.mutex.RLock()
+	defer r.mutex.RUnlock()
+
+	return len(r.blogs)
+}
+
+// FindAll returns the paginated list of all blogs
+func (r *blogRepository) FindAll(limit int, page int) []*blog.Blog {
+	r.mutex.RLock()
+	defer r.mutex.RUnlock()
+
+	blogs := make([]*blog.Blog, 0, len(r.blogs))
+	for _, value := range r.blogs {
+		blogs = append(blogs, value)
+	}
+
+	startIndex := page - 1*limit
+	endIndex := page * limit
+	return blogs[startIndex:endIndex]
+}
+
+// FindAll returns the list of most popular blogs
+func (r *blogRepository) FindPopular(limit int) []*blog.Blog {
+	r.mutex.RLock()
+	defer r.mutex.RUnlock()
+
+	blogs := make([]*blog.Blog, 0, len(r.blogs))
+	for _, value := range r.blogs {
+		blogs = append(blogs, value)
+	}
+
+	// TODO: sort by popularity ;P
+	return blogs[0:limit]
+}
+
 // NewBlogRepository returns a new instance of a blog repository
 func NewBlogRepository() blog.Repository {
 	return &blogRepository{

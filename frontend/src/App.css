@@ -1,0 +1,191 @@
+/*
+Based on:
+
+Theme Name: BlueBubble 3.1
+Theme URI: http://bluebubble.dosmundoscafe.com/
+Alternate Theme URI: http://www.thomasveit.com/bluebubble-free-premium-wordpress-portfolio-theme/
+Description: Minimal &amp; Elegant Portfolio Theme - Wordpress 3.0 ready
+Version: 3.1 
+Author: Thomas Veit (WP 3.0 updates by Mike Walsh)
+Author URI: http://bluebubble.dosmundoscafe.com/free-theme-bluebubble-v3-0/
+Updates Author URI: http://arte.dosmundoscafe.com
+
+The CSS, XHTML and design is released under GPL:
+http://www.opensource.org/licenses/gpl-3.0.html
+*/
+
+body {
+  background: #ddd url("bgstatic.png") repeat;
+  font-family: "Abhaya Libre", Georgia, serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #333;
+  padding-top: 70px;
+}
+
+a {
+  color: #333;
+}
+
+a:hover {
+  color: #ea3556;
+}
+
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3 {
+  margin: 10px 0;
+}
+
+.panel-default {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  border: 0;
+}
+
+.panel-default .panel-heading {
+  background: #333;
+  color: #fff;
+}
+
+.panel-default .panel-heading a {
+  color: #fff;
+}
+
+.panel-default .panel-footer {
+  padding: 10px 5px;
+}
+
+/* header */
+
+#mainmenu {
+  background: #333333;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+#mainmenu a {
+  color: #ea3556;
+}
+
+#mainmenu img {
+  margin: -6px 4px;
+  display: inline;
+  float: left;
+}
+
+#mainmenu .navbar-text {
+  margin: 15px 5px;
+  color: #fff;
+}
+
+#mainmenu .langs {
+  margin: 5px 0;
+}
+
+#mainmenu .langs a {
+  padding: 10px 15px;
+}
+
+#mainmenu .langs.active a {
+  color: #fff;
+  background: #ff003c;
+}
+
+#mainmenu .menuitem:hover,
+#mainmenu .active:hover {
+  color: #333;
+  background: #fff;
+}
+
+#mainmenu #searchbar {
+  border: 0;
+}
+
+#mainmenu #searchbtn {
+  background: #ea3556;
+  color: #fff;
+  border: 1px solid #e03050;
+}
+
+#mainmenu #searchbtn:hover {
+  background: #e03050;
+}
+
+/* content */
+article .nav-pills .active a,
+article .nav-pills .active a:hover {
+  background: #ea3556;
+}
+
+article .media {
+  margin-top: 20px;
+}
+
+.btn-facebook {
+  background: #3b5998;
+  border: 1px solid #3b5998;
+}
+
+.btn-facebook:hover {
+  background: #3b5998;
+  opacity: 0.9;
+}
+
+.btn-ts,
+.btn-ts:hover {
+  color: #999;
+  text-decoration: none;
+}
+
+.pager .disabled a,
+.pager .disabled a:hover {
+  color: #999;
+  background: none;
+}
+
+/* sidebar */
+.sidebar img {
+  margin: 5px auto;
+  max-width: 100%;
+}
+
+/* tags */
+
+.tag {
+  line-height: 1.2;
+}
+.tagsize1 {
+  font-size: 120%;
+}
+.tagsize2 {
+  font-size: 140%;
+}
+.tagsize3 {
+  font-size: 160%;
+}
+
+/* footer */
+
+footer {
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+footer ul {
+  padding: 0;
+}
+
+footer li {
+  display: inline;
+  padding: 0 5px;
+}
+
+/** responsive */
+@media (max-width: 768px) {
+  h3 {
+    font-size: 18px;
+  }
+}

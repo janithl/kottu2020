@@ -26,6 +26,7 @@ func (s *Server) outputJSON(w http.ResponseWriter, output interface{}) {
 	if s.outputErrorJSON(w, err, http.StatusInternalServerError) {
 		return
 	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(outputJSON)
 }

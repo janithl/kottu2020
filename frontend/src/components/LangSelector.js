@@ -21,9 +21,4 @@ function LangSelector({ lang, time }) {
   );
 }
 
-LangSelector.defaultProps = {
-  lang: "en",
-  time: "off"
-};
-
 export default LangSelector;

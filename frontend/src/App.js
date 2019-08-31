@@ -2,15 +2,15 @@ import React from "react";
 import "./App.css";
 import { Router } from "@reach/router";
 
-import Header from "./components/Header";
+import Page from "./components/Page";
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <Header path=":lang/:time" />
-        <Header path=":lang" />
-        <Header default />
+        <Page path=":lang/:time" />
+        <Page path=":lang" />
+        <Page default />
       </Router>
     </div>
   );

@@ -38,13 +38,13 @@ function Header({ lang, time }) {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" href="./">
+            <Link className="navbar-brand" to="/">
               <img
                 alt="Kottu"
                 title="Go to the Kottu home page"
                 src="/logo.png"
               />
-            </a>
+            </Link>
           </div>
           <div className="collapse navbar-collapse" id="navbar-collapse">
             <Introduction number={100} />
@@ -56,10 +56,5 @@ function Header({ lang, time }) {
     </header>
   );
 }
-
-Header.defaultProps = {
-  lang: "en",
-  time: "off"
-};
 
 export default Header;

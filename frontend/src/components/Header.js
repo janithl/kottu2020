@@ -1,35 +1,39 @@
 import React from "react";
 
-function Header() {
+import LangSelector from "./LangSelector";
+import SearchBar from "./SearchBar";
+
+function Header({ lang, time }) {
   return (
     <header>
-      <nav id="mainmenu" class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
+      <nav id="mainmenu" className="navbar navbar-inverse navbar-fixed-top">
+        <div className="container">
+          <div className="navbar-header">
             <button
               type="button"
-              class="navbar-toggle collapsed"
+              className="navbar-toggle collapsed"
               data-toggle="collapse"
               data-target="#navbar-collapse"
               aria-expanded="false"
             >
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="./">
+            <a className="navbar-brand" href="./">
               <img
                 alt="Kottu"
                 title="Go to the Kottu home page"
-                src="logo.png"
+                src="/logo.png"
               />
             </a>
           </div>
-          <div class="collapse navbar-collapse" id="navbar-collapse">
-            <p class="navbar-text hidden-sm">
-              <strong class="visible-xs-inline">Kottu </strong>syndicates over{" "}
-              <a title="View our blogroll" href="./blogroll">
+          <div className="collapse navbar-collapse" id="navbar-collapse">
+            <p className="navbar-text hidden-sm">
+              <strong className="visible-xs-inline">Kottu </strong>syndicates
+              over{" "}
+              <a title="View our blogroll" href="/blogroll">
                 100 Sri Lankan blogs
               </a>
               . You can{" "}
@@ -41,53 +45,18 @@ function Header() {
               </a>
               .
             </p>
-            <form
-              class="navbar-form navbar-left"
-              method="GET"
-              action="./search/"
-            >
-              <div class="form-group">
-                <input
-                  tabindex="1"
-                  id="searchbar"
-                  name="q"
-                  type="text"
-                  class="form-control"
-                  placeholder="Search Kottu..."
-                  value=""
-                />
-              </div>
-              <button
-                tabindex="2"
-                id="searchbtn"
-                type="submit"
-                class="btn btn-default"
-              >
-                Search
-              </button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-              <li class="langs">
-                <a class="menuitem" title="View English language posts" href="">
-                  English
-                </a>
-              </li>
-              <li class="langs">
-                <a class="menuitem" title="View Sinhala language posts" href="">
-                  සිංහල
-                </a>
-              </li>
-              <li class="langs">
-                <a class="menuitem" title="View Tamil language posts" href="">
-                  தமிழ்
-                </a>
-              </li>
-            </ul>
+            <SearchBar />
+            <LangSelector lang={lang} time={time} />
           </div>
         </div>
       </nav>
     </header>
   );
 }
+
+Header.defaultProps = {
+  lang: "en",
+  time: "off"
+};
 
 export default Header;

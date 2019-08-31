@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@reach/router";
 
 const languages = {
   en: "English",
@@ -11,9 +12,9 @@ function LangSelector({ lang, time }) {
     <ul className="nav navbar-nav navbar-right">
       {Object.keys(languages).map(l => (
         <li key={l} className={lang === l ? "langs active" : "menuitem"}>
-          <a className="menuitem" href={"/" + l}>
+          <Link className="menuitem" to={"/" + l}>
             {languages[l]}
-          </a>
+          </Link>
         </li>
       ))}
     </ul>

@@ -1,7 +1,24 @@
 import React from "react";
+import { Link } from "@reach/router";
 
 import LangSelector from "./LangSelector";
 import SearchBar from "./SearchBar";
+
+function Introduction({ number }) {
+  return (
+    <p className="navbar-text hidden-sm">
+      <strong className="visible-xs-inline">Kottu </strong>syndicates over{" "}
+      <Link title="View our blogroll" to="/blogroll">
+        {number} Sri Lankan blogs
+      </Link>
+      . You can{" "}
+      <Link title="Learn more about Kottu and how you can join" to="/about">
+        join too
+      </Link>
+      .
+    </p>
+  );
+}
 
 function Header({ lang, time }) {
   return (
@@ -30,21 +47,7 @@ function Header({ lang, time }) {
             </a>
           </div>
           <div className="collapse navbar-collapse" id="navbar-collapse">
-            <p className="navbar-text hidden-sm">
-              <strong className="visible-xs-inline">Kottu </strong>syndicates
-              over{" "}
-              <a title="View our blogroll" href="/blogroll">
-                100 Sri Lankan blogs
-              </a>
-              . You can{" "}
-              <a
-                title="Learn more about Kottu and how you can join"
-                href="./about"
-              >
-                join too
-              </a>
-              .
-            </p>
+            <Introduction number={100} />
             <SearchBar />
             <LangSelector lang={lang} time={time} />
           </div>

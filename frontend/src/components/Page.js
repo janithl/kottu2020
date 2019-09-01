@@ -2,15 +2,19 @@ import React from "react";
 
 import Header from "./Header";
 import Content from "./Content";
-import Feed from "./Feed";
+import MainSidebar from "./MainSidebar";
+import { LatestFeed } from "./Feed";
 
 function Page({ lang, time }) {
   return (
     <>
       <Header lang={lang} time={time} />
-      <Content>
-        <Feed endpoint={"http://localhost:9000/api/latest/" + lang} />
-      </Content>
+      <div className="container">
+        <Content>
+          <LatestFeed lang={lang} />
+        </Content>
+        <MainSidebar />
+      </div>
     </>
   );
 }

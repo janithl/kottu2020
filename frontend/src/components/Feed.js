@@ -1,30 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
+import { APIContext } from "../contexts/APIContext";
 import FeedItem from "./FeedItem";
 
-function Feed({ endpoint }) {
-  const [items, setItems] = useState([]);
-  const [url, setURL] = useState(endpoint);
-
-  useEffect(() => {
-    if (items.length === 0 || url !== endpoint) {
-      fetch(endpoint)
-        .then(response => response.json())
-        .then(json => {
-          setItems(json);
-          setURL(endpoint);
-        })
-        .catch(error => console.error(error));
-    }
-  });
-
+export default function Feed({ items }) {
   return (
-    <>
-      {items.map(item => (
-        <FeedItem key={item.ID} item={item} />
-      ))}
-    </>
+    <>{items && items.map(item => <FeedItem key={item.ID} item={item} />)}</>
   );
 }
 
-export default Feed;
+export function LatestFeed({ lang }) {
+  return (
+    <APIContext.Consumer>
+      {api => <Feed items={api.getLatestPosts(lang)} />}
+    </APIContext.Consumer>
+  );
+}

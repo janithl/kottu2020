@@ -1,15 +1,16 @@
 import React from "react";
 import { Link } from "@reach/router";
 
+import { APIContext } from "../contexts/APIContext";
 import LangSelector from "./LangSelector";
 import SearchBar from "./SearchBar";
 
-function Introduction({ number }) {
+function Introduction({ blogCount }) {
   return (
     <p className="navbar-text hidden-sm">
       <strong className="visible-xs-inline">Kottu </strong>syndicates over{" "}
       <Link title="View our blogroll" to="/blogroll">
-        {number} Sri Lankan blogs
+        {blogCount} Sri Lankan blogs
       </Link>
       . You can{" "}
       <Link title="Learn more about Kottu and how you can join" to="/about">
@@ -20,7 +21,7 @@ function Introduction({ number }) {
   );
 }
 
-function Header({ lang, time }) {
+function Header({ lang, time, numBlogs }) {
   return (
     <header>
       <nav id="mainmenu" className="navbar navbar-inverse navbar-fixed-top">
@@ -47,7 +48,7 @@ function Header({ lang, time }) {
             </Link>
           </div>
           <div className="collapse navbar-collapse" id="navbar-collapse">
-            <Introduction number={100} />
+            <Introduction blogCount={numBlogs} />
             <SearchBar />
             <LangSelector lang={lang} time={time} />
           </div>
@@ -57,4 +58,10 @@ function Header({ lang, time }) {
   );
 }
 
-export default Header;
+const HeaderWithContext = props => (
+  <APIContext.Consumer>
+    {api => <Header numBlogs={api.getNumBlogs()} {...props} />}
+  </APIContext.Consumer>
+);
+
+export default HeaderWithContext;
